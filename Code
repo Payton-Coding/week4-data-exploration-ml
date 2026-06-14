@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, classification_report
 
 # Loads the data set
 
-file_path = r"YOU WILL NEED TO SAVE THIS FILE INTO A LOCATION FOR THE CODE TO FIND THE .CSV adult.csv"
+file_path = r"YOU WILL NEED TO PUT YOUR FILE PATH HERE EXAMPLE C:User\Document\Module4\adult.csv"
 
 df = pd.read_csv(file_path)
 
@@ -62,7 +62,6 @@ plt.ylabel("Count")
 plt.tight_layout()
 
 # Age distribution figure
-
 plt.figure("Age Distribution", figsize=(8, 5))
 
 plt.hist(
@@ -77,7 +76,6 @@ plt.ylabel("Frequency")
 plt.tight_layout()
 
 # Hours worked per week figure
-
 plt.figure("Hours Worked Per Week", figsize=(8, 5))
 
 plt.hist(
@@ -92,7 +90,6 @@ plt.ylabel("Frequency")
 plt.tight_layout()
 
 # Education level figure
-
 plt.figure("Education Levels", figsize=(10, 6))
 
 df["education"].value_counts().head(10).plot(
@@ -111,7 +108,6 @@ plt.xticks(
 plt.tight_layout()
 
 # Scatterplot output
-
 plt.figure("Age vs Hours Worked", figsize=(8, 5))
 
 plt.scatter(
@@ -197,13 +193,11 @@ model.fit(
 )
 
 # Predictions codes
-
 y_pred = model.predict(
     X_test
 )
 
 # MODEL EVALUATION
-
 accuracy = accuracy_score(
     y_test,
     y_pred
@@ -244,8 +238,7 @@ print("\nTop 10 Features:")
 print(feature_importance)
 
 # Feature importance display
-
-plt.figure("Figure 6 - Feature Importance", figsize=(10, 6))
+plt.figure("Feature Importance", figsize=(10, 6))
 
 plt.bar(
     feature_importance["Feature"],

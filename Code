@@ -1,0 +1,267 @@
+# Week 4 Hands-On Assignment
+# Data Exploration, Feature Engineering, and Basic Modeling
+# Dataset: Adult Income Dataset
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Loads the data set
+
+file_path = r"YOU WILL NEED TO SAVE THIS FILE INTO A LOCATION FOR THE CODE TO FIND THE .CSV adult.csv"
+
+df = pd.read_csv(file_path)
+
+print("=" * 60)
+print("FIRST 5 ROWS")
+print("=" * 60)
+print(df.head())
+
+print("\nDataset Shape:")
+print(df.shape)
+
+print("\nColumns:")
+print(df.columns.tolist())
+
+# Data exploration
+
+print("\n" + "=" * 60)
+print("DATASET INFORMATION")
+print("=" * 60)
+df.info()
+
+print("\n" + "=" * 60)
+print("SUMMARY STATISTICS")
+print("=" * 60)
+print(df.describe())
+
+print("\n" + "=" * 60)
+print("MISSING VALUES")
+print("=" * 60)
+print(df.isnull().sum())
+
+# Replace unknown values
+df = df.replace("?", "Unknown")
+
+print("\nIncome Distribution:")
+print(df["income"].value_counts())
+
+# Income distribution figure
+
+plt.figure("Income Distribution", figsize=(8, 5))
+
+df["income"].value_counts().plot(kind="bar")
+
+plt.title("Income Distribution")
+plt.xlabel("Income Level")
+plt.ylabel("Count")
+
+plt.tight_layout()
+
+# Age distribution figure
+
+plt.figure("Age Distribution", figsize=(8, 5))
+
+plt.hist(
+    df["age"],
+    bins=20
+)
+
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+
+plt.tight_layout()
+
+# Hours worked per week figure
+
+plt.figure("Hours Worked Per Week", figsize=(8, 5))
+
+plt.hist(
+    df["hours-per-week"],
+    bins=20
+)
+
+plt.title("Hours Worked Per Week")
+plt.xlabel("Hours Worked")
+plt.ylabel("Frequency")
+
+plt.tight_layout()
+
+# Education level figure
+
+plt.figure("Education Levels", figsize=(10, 6))
+
+df["education"].value_counts().head(10).plot(
+    kind="bar"
+)
+
+plt.title("Top 10 Education Levels")
+plt.xlabel("Education")
+plt.ylabel("Count")
+
+plt.xticks(
+    rotation=45,
+    ha="right"
+)
+
+plt.tight_layout()
+
+# Scatterplot output
+
+plt.figure("Age vs Hours Worked", figsize=(8, 5))
+
+plt.scatter(
+    df["age"],
+    df["hours-per-week"],
+    alpha=0.3
+)
+
+plt.title("Age vs Hours Worked")
+plt.xlabel("Age")
+plt.ylabel("Hours Worked Per Week")
+
+plt.tight_layout()
+
+# Creates a new feature that combines age and hours worked per week
+print("\n" + "=" * 60)
+print("FEATURE ENGINEERING")
+print("=" * 60)
+
+df["experience_score"] = (
+    df["age"] *
+    df["hours-per-week"]
+)
+
+print(
+    df[
+        [
+            "age",
+            "hours-per-week",
+            "experience_score"
+        ]
+    ].head()
+)
+
+# Encodes the income column: 0 = earns $50K or less, 1 = earns more than $50K
+df["income"] = df["income"].map({
+    "<=50K": 0,
+    ">50K": 1
+})
+
+categorical_columns = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "gender",
+    "native-country"
+]
+
+df_encoded = pd.get_dummies(
+    df,
+    columns=categorical_columns,
+    drop_first=True
+)
+
+print("\nEncoded Dataset Shape:")
+# Separates the dataset into features (X) and the target variable (y) for prediction
+print(df_encoded.shape)
+
+X = df_encoded.drop(
+    "income",
+    axis=1
+)
+
+y = df_encoded["income"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+
+model = RandomForestClassifier(
+    random_state=42
+)
+
+model.fit(
+    X_train,
+    y_train
+)
+
+# Predictions codes
+
+y_pred = model.predict(
+    X_test
+)
+
+# MODEL EVALUATION
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+print("\n" + "=" * 60)
+print("MODEL ACCURACY")
+print("=" * 60)
+
+print(
+    f"Accuracy: {accuracy:.4f}"
+)
+
+print("\nClassification Report:")
+print(
+    classification_report(
+        y_test,
+        y_pred
+    )
+)
+
+# Feature importance column codes
+feature_importance = pd.DataFrame({
+    "Feature": X.columns,
+    "Importance": model.feature_importances_
+})
+
+feature_importance = (
+    feature_importance
+    .sort_values(
+        by="Importance",
+        ascending=False
+    )
+    .head(10)
+)
+
+print("\nTop 10 Features:")
+print(feature_importance)
+
+# Feature importance display
+
+plt.figure("Figure 6 - Feature Importance", figsize=(10, 6))
+
+plt.bar(
+    feature_importance["Feature"],
+    feature_importance["Importance"]
+)
+
+plt.title("Top 10 Most Important Features")
+plt.xlabel("Feature")
+plt.ylabel("Importance")
+
+plt.xticks(
+    rotation=45,
+    ha="right"
+)
+
+plt.tight_layout()
+
+# Outputs windows
+plt.show()

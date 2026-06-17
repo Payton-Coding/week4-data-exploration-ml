@@ -1,0 +1,8 @@
+What was challenging or surprising about feature engineering?
+This was an interesting assignment, the first challenge I encountered was deciding what new feature to create from the existing data set, Adult income. I learned that feature engineering is more than simply adding new columns, it is more about thinking about what information might help the model make better predictions. I created an experience_score feature by multiplying the age and hours worked per week. This assignment showed how existing variables can be combined to create a new feature not immediately found in the dataset.
+
+How did your choices affect model performance?
+	My feature engineering choices helped provide additional information to the Random Forest model. The experience_score feature combined several variables together like age and work hors into a single variable. I used one-hot encoding to convert the categorical variable from education, occupation, and income. These steps allowed the model to be taught how to provide an accurate score when predicting individuals’ income above or below $50,000 a year.
+
+How could you improve your workflow or analysis next time?
+	If I were to complete this project again, I would look at comparing different machine learning models. I would also spend more time looking over the Random Forest settings to see if I could improve the model’s accuracy. I made multiple figures to gain a deeper understanding of features I am limited in my knowledge of machine learning since I have only taken Python 2 and this course so far, so I do have some experience using encoding, Numpy, and Pandas. Overall, I think experimenting with more features and models would help me learn more about the dataset and improve the final results!
